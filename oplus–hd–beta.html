@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PixelUp – Peningkat Kualitas Foto</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#1b1034;--pn:#2b1a52;--tx:#fff5e0;--mu:#b9a8e8;--p:#ff4fa3;--c:#36e3ff;--y:#ffe14d;--g:#6dff7a;--v:#9b6bff}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--tx);font-family:"Press Start 2P","Courier New",monospace;font-size:10px;line-height:1.7;min-height:100vh;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0);
+background-image:linear-gradient(45deg,#22134a 25%,transparent 25%,transparent 75%,#22134a 75%),linear-gradient(45deg,#22134a 25%,transparent 25%,transparent 75%,#22134a 75%);background-size:32px 32px;background-position:0 0,16px 16px}
+.wrap{max-width:560px;margin:0 auto;padding:16px 16px 40px}
+.hide{display:none!important}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+.logo{font-size:16px;color:var(--y);text-shadow:3px 3px 0 var(--p)}
+.pro{background:var(--y);color:#000;padding:6px 8px;border:3px solid #000;box-shadow:3px 3px 0 #000}
+h1{font-size:15px;line-height:1.6;text-shadow:3px 3px 0 #000}h1 span{color:var(--c)}
+.sub{color:var(--mu);margin:12px 0 20px;font-size:8px;text-align:center;line-height:1.8}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card{background:var(--pn);border:4px solid #000;box-shadow:6px 6px 0 #000;padding:14px;cursor:pointer;color:var(--tx);font:inherit;text-align:left}
+.card:active,.cta:active,.back:active,.mini:active{transform:translate(3px,3px);box-shadow:1px 1px 0 #000}
+.ic{width:48px;height:48px;border:4px solid #000;display:grid;place-items:center;font-size:22px;margin-bottom:10px;box-shadow:inset -4px -4px 0 rgba(0,0,0,.3),inset 4px 4px 0 rgba(255,255,255,.35)}
+.card b{display:block;font-size:10px;margin-bottom:6px;color:var(--y)}.card small{color:var(--mu);font-size:8px;display:block}
+.g1{background:var(--v)}.g2{background:var(--p)}.g3{background:var(--c)}.g4{background:var(--g)}
+.hero{margin-top:22px;background:var(--c);color:#000;border:4px solid #000;box-shadow:6px 6px 0 #000;padding:14px;display:flex;gap:12px;align-items:center;font-size:8px}
+.hero b{display:block;font-size:10px;margin-bottom:4px}
+.bar2{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.back,.save,.mini{font:inherit;cursor:pointer;border:4px solid #000;box-shadow:4px 4px 0 #000;color:#000}
+.back{background:var(--y);padding:10px 12px;font-size:10px}
+.save{background:var(--g);padding:10px 14px;font-size:10px}.save:disabled{opacity:.35;box-shadow:none}
+.mini{background:var(--c);padding:8px;font-size:8px;border-width:3px;box-shadow:3px 3px 0 #000}
+.new{background:var(--p);color:#000;padding:6px 8px;border:3px solid #000;font-size:8px}
+.title{text-align:center;font-size:12px;color:var(--y);text-shadow:3px 3px 0 #000;margin:16px 0 8px;line-height:1.6}
+.demo{position:relative;aspect-ratio:8/5;border:4px solid #000;box-shadow:6px 6px 0 #000;overflow:hidden;background:#000}
+.demo canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
+#dBefore{image-rendering:auto;filter:blur(3px) brightness(.8) saturate(.6)}
+.k-repair #dBefore{filter:blur(4px) brightness(.4) contrast(.8)}
+#dWrap{position:absolute;inset:0;animation:sw 4s steps(16) infinite}
+@keyframes sw{0%,100%{clip-path:inset(0 0 0 15%)}50%{clip-path:inset(0 0 0 85%)}}
+#dLine{position:absolute;top:0;bottom:0;width:3px;background:var(--y);animation:swl 4s steps(16) infinite}
+@keyframes swl{0%,100%{left:15%}50%{left:85%}}
+.k-live #dWrap{animation:none;clip-path:none}.k-live #dLine,.k-live #dBefore,.k-live .tag{display:none}
+.k-live #dAfter{animation:dolly 3s steps(10) infinite alternate}
+@keyframes dolly{to{transform:scale(1.25)}}
+.tag{position:absolute;top:8px;background:#000;color:var(--y);padding:4px 6px;font-size:7px;z-index:2}
+.tabs{display:flex;justify-content:center;gap:8px;margin:18px 0 6px}
+.tabs button{font:inherit;font-size:8px;padding:9px 12px;background:var(--pn);color:var(--mu);border:3px solid #000;cursor:pointer}
+.tabs button.on{background:var(--y);color:#000}
+.opts{display:flex;gap:14px;overflow-x:auto;padding:14px 8px 10px;justify-content:safe center}
+.opt{background:none;border:0;font:inherit;color:var(--mu);text-align:center;cursor:pointer;flex:none}
+.bx{position:relative;display:grid;place-items:center;width:62px;height:62px;background:var(--pn);border:4px solid #000;box-shadow:4px 4px 0 #000;font-size:11px;color:var(--tx);margin:0 auto 8px}
+.bx em{position:absolute;top:-10px;right:-8px;background:var(--p);color:#000;font-style:normal;font-size:7px;padding:2px 4px;border:2px solid #000}
+.opt small{font-size:7px;display:block}
+.opt.on .bx{background:var(--y);color:#000}.opt.on small{color:var(--y)}
+.cta{width:100%;margin-top:14px;padding:16px;background:#fff5e0;color:#000;font:inherit;font-size:11px;border:4px solid #000;box-shadow:5px 5px 0 #000;cursor:pointer}
+.cta.sec{background:var(--v);color:#fff}.cta:disabled{opacity:.5}
+.stage{position:relative;margin:10px auto 0;border:4px solid #000;box-shadow:6px 6px 0 #000;background:#000;overflow:hidden;touch-action:none;user-select:none}
+#orig,#res{position:absolute;inset:0;width:100%;height:100%;transform:scale(var(--z,1));transform-origin:var(--ox,50%) var(--oy,50%)}
+.layer{position:absolute;inset:0;overflow:hidden}
+.handle{position:absolute;top:0;bottom:0;width:4px;background:var(--y);transform:translateX(-50%);z-index:2}
+.handle::after{content:"◀▶";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--y);color:#000;border:3px solid #000;padding:8px 4px;font-size:8px}
+.row{display:flex;justify-content:space-between;align-items:center;margin-top:16px;font-size:9px;color:var(--y)}
+.info{color:var(--mu);font-size:8px;margin-top:12px;text-align:center;line-height:1.8}
+.pbar{height:16px;border:3px solid #000;background:var(--pn);margin-top:14px}
+.pbar i{display:block;height:100%;width:0;background:repeating-linear-gradient(90deg,var(--g) 0 8px,#3bbf4a 8px 10px);transition:width .2s}
+.lvs{margin-top:10px;border:4px solid #000;box-shadow:6px 6px 0 #000;background:#000;position:relative}
+.lvs video{display:block;width:100%;max-height:56vh;object-fit:contain}
+.rng{margin-top:16px;display:block;font-size:8px;color:var(--mu)}.rng input{width:100%;margin-top:8px;accent-color:var(--p)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- LOBI -->
+<section id="lobby">
+  <header><div class="logo">PIXELUP</div><span class="pro">PRO</span></header>
+  <h1>FOTO BURAM JADI <span>JERNIH!</span></h1>
+  <p class="sub" style="text-align:left">Tingkatkan kualitas foto langsung di perangkat. Tanpa upload.</p>
+  <div class="grid">
+    <button class="card" data-f="repair"><div class="ic g1">🛠</div><b>REPAIR PRO</b><small>Selamatkan foto gelap &amp; blur.</small></button>
+    <button class="card" data-f="quality"><div class="ic g2">✨</div><b>PENINGKAT KUALITAS</b><small>HD, HD+ &amp; Ultra HD+.</small></button>
+    <button class="card" data-f="super"><div class="ic g3">🔍</div><b>RESOLUSI SUPER</b><small>Perbesar hingga 4K.</small></button>
+    <button class="card" data-f="live"><div class="ic g4">🎞</div><b>FOTO LIVE</b><small>Ubah VIDEO jadi foto live.</small></button>
+  </div>
+  <div class="hero"><div style="font-size:30px">🚀</div><div><b>PRIVASI AMAN</b>Semua proses di browser kamu.</div></div>
+</section>
+
+<!-- INTRO FITUR -->
+<section id="intro" class="hide">
+  <div class="bar2"><button class="back" id="inBack">◀</button><span class="new hide" id="newB">TERBARU 5</span></div>
+  <div class="title" id="inT"></div><p class="sub" id="inS"></p>
+  <div class="demo" id="demo">
+    <canvas id="dBefore" width="96" height="60"></canvas>
+    <div id="dWrap"><canvas id="dAfter" width="96" height="60"></canvas></div>
+    <div id="dLine"></div>
+    <span class="tag" style="left:8px">SEBELUM</span><span class="tag" style="right:8px">SESUDAH</span>
+  </div>
+  <div id="inOpts"></div>
+  <button class="cta" id="try">COBA SEKARANG</button>
+</section>
+
+<!-- EDITOR FOTO -->
+<section id="ed" class="hide">
+  <div class="bar2"><button class="back" id="edBack">◀</button><button class="save" id="save" disabled>SIMPAN</button></div>
+  <div class="stage" id="stage">
+    <img id="orig" alt="Foto asli">
+    <div class="layer" id="layer"><canvas id="res"></canvas></div>
+    <span class="tag" style="left:8px" id="tL">ASLI</span>
+    <span class="tag hide" style="right:8px" id="tR"></span>
+    <div class="handle hide" id="handle"></div>
+  </div>
+  <div class="row"><b id="edT"></b><button class="mini" id="zoom">🔍 ZOOM 1X</button></div>
+  <div id="edOpts"></div>
+  <div class="pbar hide" id="pbar"><i id="pi"></i></div>
+  <button class="cta" id="go">▶ TINGKATKAN</button>
+  <button class="cta sec hide" id="save2">⬇ SIMPAN FOTO</button>
+  <p class="info" id="info"></p>
+</section>
+
+<!-- FOTO LIVE -->
+<section id="lv" class="hide">
+  <div class="bar2"><button class="back" id="lvBack">◀</button></div>
+  <div id="lvEdit">
+    <div class="title">✦ FOTO LIVE ✦</div>
+    <div class="lvs"><video id="vid" muted playsinline loop></video></div>
+    <label class="rng">PILIH COVER &amp; AWAL KLIP (3 DETIK)<input type="range" id="rng" min="0" max="1" step="0.05" value="0"></label>
+    <button class="cta" id="mk">🎞 BUAT FOTO LIVE</button>
+    <p class="info" id="lvInfo"></p>
+  </div>
+  <div id="lvDone" class="hide">
+    <div class="title">FOTO LIVE SELESAI ✓</div>
+    <div class="lvs"><video id="outV" muted playsinline loop autoplay></video><span class="tag" style="right:8px">LIVE ●</span></div>
+    <button class="cta" id="sv">⬇ SIMPAN FOTO LIVE (VIDEO)</button>
+    <button class="cta sec" id="sp">🖼 SIMPAN FOTO (JPG)</button>
+    <button class="cta sec" id="again">BUAT LAGI</button>
+  </div>
+</section>
+
+</div>
+<input type="file" id="file" hidden>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const sleep=()=>new Promise(r=>setTimeout(r,25));
+const T={quality:["PENINGKAT KUALITAS","Peningkatan ringan, hapus blur dalam sekali klik"],repair:["REPAIR - PRO","Cahaya buruk, blur parah, foto jelek, semua terselamatkan dalam satu klik"],super:["RESOLUSI SUPER","Perbesar foto hingga 4K tetap tajam"],live:["FOTO LIVE","Ubah video jadi foto live yang hidup"]};
+const OPT={
+ quality:{umum:[["hd","HD","HD"],["hdp","HD+","HD+"],["uhd","UHD+","ULTRA HD+"],["ai","AI","UHD AI",1]],skenario:[["potret","😊","POTRET"],["alam","🌄","ALAM"],["malam","🌙","MALAM"]]},
+ repair:{all:[["dasar","◎","DASAR"],["pro","✱","PRO"]]},
+ super:{all:[["asli","🖼","ASLI"],["1080","1080P","HD"],["2k","2K","ULTRA HD"],["4k","4K","EKSTREM"]]}
+};
+/* scale/target = pembesaran, dn = denoise, sh = ketajaman, r = radius, cl = kejernihan, con/sat = kontras/warna, lv = auto cahaya */
+const P={
+ hd:{scale:1.5,dn:.15,sh:.9,r:1,cl:.15,con:1.04,sat:1.05},
+ hdp:{scale:2,dn:.2,sh:1.2,r:1.2,cl:.25,con:1.07,sat:1.08},
+ uhd:{scale:3,dn:.25,sh:1.5,r:1.5,cl:.35,con:1.1,sat:1.12,lv:1},
+ ai:{scale:4,dn:.3,sh:1.8,r:1.5,cl:.45,con:1.12,sat:1.15,lv:1},
+ potret:{scale:2,dn:.55,sh:.7,r:1,cl:.1,con:1.04,sat:1.06,lv:1},
+ alam:{scale:2,dn:.1,sh:1.3,r:1.5,cl:.55,con:1.12,sat:1.3},
+ malam:{scale:2,dn:.5,sh:1,r:1,cl:.2,con:1.05,sat:1.1,lv:1,lift:.75},
+ dasar:{scale:1.25,dn:.4,sh:1.2,r:1,cl:.2,con:1.06,sat:1.08,lv:1},
+ pro:{scale:1.5,dn:.6,sh:1.8,r:1.5,cl:.4,con:1.1,sat:1.15,lv:1,lift:.85},
+ asli:{scale:1,sh:0,cl:0,dn:0,con:1,sat:1},
+ "1080":{target:1920,dn:.2,sh:1.2,r:1.5,cl:.2,con:1.05,sat:1.05},
+ "2k":{target:2560,dn:.25,sh:1.5,r:2,cl:.3,con:1.07,sat:1.08},
+ "4k":{target:3840,dn:.3,sh:1.8,r:2,cl:.35,con:1.1,sat:1.1}
+};
+let feat,tab="umum",sel,img=null,z=1,lp=[50,50];
+
+function show(id){["lobby","intro","ed","lv"].forEach(s=>$("#"+s).classList.toggle("hide",s!==id));scrollTo(0,0)}
+function renderOpts(){
+  let h="";
+  if(feat!=="live"){
+    const o=OPT[feat],list=feat==="quality"?o[tab]:o.all;
+    if(feat==="quality")h+=`<div class="tabs"><button data-t="umum" class="${tab==="umum"?"on":""}">UMUM</button><button data-t="skenario" class="${tab==="skenario"?"on":""}">SKENARIO</button></div>`;
+    h+=`<div class="opts">`+list.map(([id,ic,nm,hot])=>`<button class="opt ${id===sel?"on":""}" data-o="${id}"><span class="bx">${ic}${hot?"<em>HOT</em>":""}</span><small>${nm}</small></button>`).join("")+`</div>`;
+  }
+  $("#inOpts").innerHTML=$("#edOpts").innerHTML=h;
+}
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-t]");if(t){tab=t.dataset.t;sel=OPT.quality[tab][0][0];renderOpts();return}
+  const o=e.target.closest("[data-o]");if(o){sel=o.dataset.o;renderOpts()}
+});
+
+/* demo pixel art */
+function scene(c){const x=c.getContext("2d"),R=(k,a,b,w,h)=>{x.fillStyle=k;x.fillRect(a,b,w,h)};
+  R("#4ec3ff",0,0,96,16);R("#79d7ff",0,16,96,12);R("#a8e8ff",0,28,96,8);
+  R("#fff",10,8,14,3);R("#fff",14,5,8,3);R("#fff",52,12,16,3);R("#fff",56,9,8,3);
+  for(let y=-6;y<=6;y++)for(let a=-6;a<=6;a++)if(a*a+y*y<=36)R("#ffe14d",70+a,12+y,1,1);
+  for(let i=0;i<=20;i++){const h=i<10?i:20-i;R("#2f9e5a",6+i,36-h,1,h)}
+  R("#1b7fe0",0,36,96,14);for(let i=0;i<12;i++)R("#5fb4ff",(i*17)%88,38+(i*5)%10,8,1);
+  R("#f2d49b",0,50,96,10);R("#d9b66f",0,50,96,1);
+  R("#3a2418",44,38,6,3);R("#ffd2a8",44,41,6,5);R("#fff",42,46,10,10);R("#ff4fa3",42,46,10,2)}
+scene($("#dBefore"));scene($("#dAfter"));
+
+/* navigasi */
+function openIntro(){
+  $("#inT").textContent="✦ "+T[feat][0]+" ✦";$("#inS").textContent=T[feat][1];
+  $("#demo").className="demo k-"+feat;$("#newB").classList.toggle("hide",feat!=="repair");
+  $("#try").textContent=feat==="live"?"PILIH VIDEO":"COBA SEKARANG";
+  renderOpts();show("intro")}
+$$(".card").forEach(c=>c.onclick=()=>{feat=c.dataset.f;tab="umum";sel={quality:"hd",repair:"pro",super:"1080"}[feat];openIntro()});
+$("#inBack").onclick=()=>show("lobby");
+$("#edBack").onclick=openIntro;
+$("#lvBack").onclick=()=>{$("#vid").pause();$("#outV").pause();openIntro()};
+$("#try").onclick=()=>{$("#file").accept=feat==="live"?"video/*":"image/*";$("#file").value="";$("#file").click()};
+
+$("#file").onchange=e=>{
+  const f=e.target.files[0];if(!f)return;const url=URL.createObjectURL(f);
+  if(feat==="live"){
+    if(!f.type.startsWith("video")){alert("Foto Live harus memakai VIDEO!");return}
+    const v=$("#vid");v.src=url;
+    v.onloadedmetadata=()=>{$("#rng").max=Math.max(0,v.duration-.1);$("#rng").value=0;startT=0;$("#lvEdit").classList.remove("hide");$("#lvDone").classList.add("hide");$("#mk").disabled=false;$("#mk").textContent="🎞 BUAT FOTO LIVE";
+      $("#lvInfo").textContent="Durasi video: "+v.duration.toFixed(1)+" detik";show("lv");v.currentTime=0;v.play()};
+    return;
+  }
+  if(!f.type.startsWith("image")){alert("Pilih file gambar.");return}
+  const im=new Image();im.onload=()=>{img=im;openEd(url)};im.src=url;
+};
+
+/* ---------- EDITOR FOTO ---------- */
+const st=$("#stage");
+function openEd(url){
+  const iw=img.naturalWidth,ih=img.naturalHeight;
+  $("#orig").src=url;st.style.aspectRatio=iw+"/"+ih;st.style.width=`min(100%,calc(56vh * ${iw/ih}))`;
+  z=1;st.style.setProperty("--z",1);$("#zoom").textContent="🔍 ZOOM 1X";
+  $("#layer").style.clipPath="inset(0 0 0 100%)";$("#handle").classList.add("hide");$("#tR").classList.add("hide");
+  $("#tL").textContent="ASLI "+iw+"x"+ih;$("#save").disabled=true;$("#save2").classList.add("hide");$("#pbar").classList.add("hide");
+  $("#edT").textContent=T[feat][0];$("#info").textContent="Pilih opsi lalu tekan TINGKATKAN.";
+  renderOpts();show("ed")}
+function setSplit(p){p=Math.max(0,Math.min(100,p));$("#handle").style.left=p+"%";$("#layer").style.clipPath=`inset(0 0 0 ${p}%)`}
+let drag=false;
+const pos=e=>{const r=st.getBoundingClientRect();return[(e.clientX-r.left)/r.width*100,(e.clientY-r.top)/r.height*100]};
+st.addEventListener("pointerdown",e=>{drag=true;const p=pos(e);if(z===1)lp=p;if(!$("#handle").classList.contains("hide"))setSplit(p[0])});
+addEventListener("pointermove",e=>{if(drag&&!$("#handle").classList.contains("hide"))setSplit(pos(e)[0])});
+addEventListener("pointerup",()=>drag=false);
+$("#zoom").onclick=()=>{z=z===1?3:z===3?6:1;st.style.setProperty("--z",z);st.style.setProperty("--ox",lp[0]+"%");st.style.setProperty("--oy",lp[1]+"%");$("#zoom").textContent="🔍 ZOOM "+z+"X"};
+
+/* ---------- PENGOLAHAN ---------- */
+function boxBlur(s,w,h,r){
+  const t=new Uint8ClampedArray(s.length),o=new Uint8ClampedArray(s.length),k=2*r+1,W=w*4;
+  for(let y=0;y<h;y++){const B=y*W;for(let c=0;c<3;c++){let sum=0;
+    for(let i=-r;i<=r;i++)sum+=s[B+c+Math.min(w-1,Math.max(0,i))*4];
+    for(let i=0;i<w;i++){t[B+c+i*4]=sum/k;sum+=s[B+c+Math.min(w-1,i+r+1)*4]-s[B+c+Math.max(0,i-r)*4]}}}
+  for(let x=0;x<w;x++){const B=x*4;for(let c=0;c<3;c++){let sum=0;
+    for(let i=-r;i<=r;i++)sum+=t[B+c+Math.min(h-1,Math.max(0,i))*W];
+    for(let i=0;i<h;i++){o[B+c+i*W]=sum/k;sum+=t[B+c+Math.min(h-1,i+r+1)*W]-t[B+c+Math.max(0,i-r)*W]}}}
+  return o}
+async function prog(p){$("#pbar").classList.remove("hide");$("#pi").style.width=p+"%";await sleep()}
+
+async function enhance(){
+  const p=P[sel],iw=img.naturalWidth,ih=img.naturalHeight,mx=Math.max(iw,ih);
+  let s=p.target?p.target/mx:p.scale;s=Math.max(1,Math.min(s,3840/mx));
+  const w=Math.round(iw*s),h=Math.round(ih*s);
+  await prog(5);
+  /* 1. pembesaran bertahap */
+  let src=img,cw=iw;
+  while(cw<w){const nw=Math.min(w,cw*2),t=document.createElement("canvas");t.width=nw;t.height=Math.round(nw*ih/iw);
+    const tx=t.getContext("2d");tx.imageSmoothingQuality="high";tx.drawImage(src,0,0,t.width,t.height);src=t;cw=nw}
+  const c=$("#res");c.width=w;c.height=h;
+  const x=c.getContext("2d",{willReadFrequently:true});x.imageSmoothingQuality="high";x.drawImage(src,0,0,w,h);
+  const id=x.getImageData(0,0,w,h),d=id.data;
+  await prog(20);
+  /* 2. kurangi noise */
+  if(p.dn){const b=boxBlur(d,w,h,1);for(let i=0;i<d.length;i+=4){d[i]=d[i]*(1-p.dn)+b[i]*p.dn;d[i+1]=d[i+1]*(1-p.dn)+b[i+1]*p.dn;d[i+2]=d[i+2]*(1-p.dn)+b[i+2]*p.dn}}
+  await prog(35);
+  /* 3. cahaya, kontras, warna */
+  let lo=0,hi=255,g=p.lift||1;
+  if(p.lv){const H=new Uint32Array(256);let n=0,sum=0;
+    for(let i=0;i<d.length;i+=28){const L=(d[i]*.299+d[i+1]*.587+d[i+2]*.114)|0;H[L]++;n++;sum+=L}
+    let a=0;for(lo=0;lo<255&&a<n*.005;lo++)a+=H[lo];
+    a=0;for(hi=255;hi>lo+40&&a<n*.005;hi--)a+=H[hi];
+    const m=Math.min(.9,Math.max(.05,((sum/n)-lo)/Math.max(1,hi-lo)));
+    g=Math.max(.5,Math.max(.55,Math.min(1,Math.log(.45)/Math.log(m)))*g)}
+  const lut=new Uint8ClampedArray(256);
+  for(let v=0;v<256;v++){const t=Math.pow(Math.min(1,Math.max(0,(v-lo)/(hi-lo))),g)*255;lut[v]=(t-128)*(p.con||1)+128}
+  const S=p.sat||1;
+  for(let i=0;i<d.length;i+=4){const r=lut[d[i]],gg=lut[d[i+1]],b=lut[d[i+2]],L=r*.299+gg*.587+b*.114;d[i]=L+(r-L)*S;d[i+1]=L+(gg-L)*S;d[i+2]=L+(b-L)*S;d[i+3]=255}
+  await prog(55);
+  /* 4. pertajam detail */
+  if(p.sh){const r=Math.min(6,Math.max(1,Math.round((p.r||1)*s/1.5))),b=boxBlur(d,w,h,r);
+    for(let i=0;i<d.length;i+=4){d[i]+=p.sh*(d[i]-b[i]);d[i+1]+=p.sh*(d[i+1]-b[i+1]);d[i+2]+=p.sh*(d[i+2]-b[i+2])}}
+  await prog(75);
+  /* 5. kejernihan (local contrast) */
+  if(p.cl){const b=boxBlur(d,w,h,Math.round(Math.max(w,h)/40));
+    for(let i=0;i<d.length;i+=4){d[i]+=p.cl*(d[i]-b[i]);d[i+1]+=p.cl*(d[i+1]-b[i+1]);d[i+2]+=p.cl*(d[i+2]-b[i+2])}}
+  await prog(92);
+  x.putImageData(id,0,0);await prog(100);
+  return{w,h,s}}
+
+$("#go").onclick=async()=>{
+  if(!img)return;$("#go").disabled=true;$("#info").textContent="Memproses foto...";
+  try{
+    const o=await enhance();
+    setSplit(50);$("#handle").classList.remove("hide");
+    $("#tL").textContent="SEBELUM "+img.naturalWidth+"x"+img.naturalHeight;
+    $("#tR").textContent="SESUDAH "+o.w+"x"+o.h;$("#tR").classList.remove("hide");
+    $("#save").disabled=false;$("#save2").classList.remove("hide");
+    $("#info").textContent=o.s>1?`Selesai! Resolusi naik ${o.s.toFixed(1)}x jadi ${o.w}x${o.h}px. Geser garis & pakai ZOOM untuk lihat detail.`:`Selesai! Ukuran asli dipertahankan, detail & cahaya ditingkatkan. Pakai ZOOM untuk lihat detail.`;
+  }catch(err){$("#info").textContent="Gagal: memori perangkat kurang. Coba opsi yang lebih kecil."}
+  $("#go").disabled=false;setTimeout(()=>$("#pbar").classList.add("hide"),600)};
+
+function dl(b,n){const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=n;a.click()}
+const saveImg=()=>$("#res").toBlob(b=>dl(b,"pixelup-"+feat+".jpg"),"image/jpeg",.95);
+$("#save").onclick=$("#save2").onclick=saveImg;
+
+/* ---------- FOTO LIVE (dari video) ---------- */
+let startT=0,cover=null,liveBlob=null;
+$("#rng").oninput=e=>{startT=+e.target.value;const v=$("#vid");v.currentTime=startT;v.play()};
+$("#vid").ontimeupdate=e=>{const v=e.target;if(v.currentTime>startT+3||v.currentTime<startT-.2)v.currentTime=startT};
+$("#mk").onclick=async()=>{
+  const v=$("#vid");
+  try{
+    v.pause();await new Promise(r=>{v.addEventListener("seeked",r,{once:true});v.currentTime=startT});
+    const k=Math.min(1,960/Math.max(v.videoWidth,v.videoHeight)),c=document.createElement("canvas");
+    c.width=Math.round(v.videoWidth*k);c.height=Math.round(v.videoHeight*k);
+    const x=c.getContext("2d");x.drawImage(v,0,0,c.width,c.height);
+    cover=await new Promise(r=>c.toBlob(r,"image/jpeg",.95));
+    const mr=new MediaRecorder(c.captureStream(30)),ch=[];let run=true;
+    mr.ondataavailable=e=>ch.push(e.data);
+    mr.onstop=()=>{run=false;v.pause();liveBlob=new Blob(ch,{type:"video/webm"});
+      const o=$("#outV");o.src=URL.createObjectURL(liveBlob);o.play();
+      $("#lvEdit").classList.add("hide");$("#lvDone").classList.remove("hide");scrollTo(0,0)};
+    mr.start();v.play();$("#mk").disabled=true;$("#mk").textContent="⏺ MEREKAM 3 DETIK...";
+    (function d(){if(!run)return;x.drawImage(v,0,0,c.width,c.height);requestAnimationFrame(d)})();
+    setTimeout(()=>mr.stop(),3000);
+  }catch(err){$("#lvInfo").textContent="Perekaman tidak didukung browser ini.";$("#mk").disabled=false}
+};
+$("#sv").onclick=()=>liveBlob&&dl(liveBlob,"pixelup-foto-live.webm");
+$("#sp").onclick=()=>cover&&dl(cover,"pixelup-foto-live-cover.jpg");
+$("#again").onclick=()=>{$("#outV").pause();$("#lvDone").classList.add("hide");$("#lvEdit").classList.remove("hide");$("#mk").disabled=false;$("#mk").textContent="🎞 BUAT FOTO LIVE";$("#vid").currentTime=startT;$("#vid").play()};
+</script>
+</body>
+</html>
